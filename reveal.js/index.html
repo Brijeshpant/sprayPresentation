@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Building your next REST based Web services using spray</title>
+
+    <meta name="description" content="Building your next REST based Web services using spra">
+
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+    <!--[if lt IE 9]>
+
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom">
+
+            <h3>Building your next REST based Web services using Spray</h3>
+            <a href="#" class="navigate-down">
+                <img data-src="images/spray.png"
+                     alt="Spray image">
+            </a>
+        </section>
+
+        <section data-transition="slide" data-background="#021525" data-background-transition="zoom">
+            <h2>What is for you</h2>
+            <ul>
+                <li>What is Spray</li>
+                <li>Why at all it is needed</li>
+                <li>How does it fits in with the application you want to expose</li>
+                <li>Set up spray application development environment (using sbt)</li>
+                <li>Basic Building blocks</li>
+                <li>Example of REST end points using spray</li>
+                <li>JSON support for (Un)Marshalling</li>
+            </ul>
+        </section>
+
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments0">
+            <H2>REST(Representational State Transfer)</H2>
+            <ul class="fragment">
+                <li> In the REST architectural style, data and functionality are
+                    considered resources
+                </li>
+                <li>These resources are accessed using Uniform Resource Identifiers (URIs)</li>
+
+                <li> It is designed to use a stateless communication protocol, typically HTTP.
+                </li>
+                <li>Resources are manipulated using a fixed set of CRUD
+                    operations: PUT, GET, POST, and DELETE.
+                </li>
+                <li> Resources content can be accessed in a variety of formats, such as HTML, XML, plain text, JSON, and
+                    others.
+                </li>
+            </ul>
+        </section>
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments2">
+            <h2>What Is Spray</h2>
+            <p class="fragment">
+                Spray is suit of libraries for building and consuming restful web services on top of akka
+            </p>
+            <ul class="fragment">
+                <li>Embeddable HTTP stack for your Akka (Scala) applications</li>
+                <li>Focus: HTTP integration layers, Rather than web applications</li>
+                <li>Fully asynchronous, non-blocking</li>
+                <li> Immutable, case-class-based HTTP model</li>
+                <li>Efficient HTTP parsing and rendering logic</li>
+                <li>Fully integrated into Typesafe stack
+                    (threadpools, config, debugging, etc.)
+                </li>
+            </ul>
+        </section>
+
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments2.0">
+            <h2>Why Spray</h2>
+            <ul class="fragment">
+                <li>Completely scala based</li>
+                <li>Non blocking at each level</li>
+                <li>Spray-servlet : It will do that</li>
+                <li>Millions of concurrent request</li>
+                <li>Easy to implement</li>
+            </ul>
+        </section>
+
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments1">
+            <h2>Where does it get its power from?</h2>
+            <blockquote class="fragment"
+                        cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+                &ldquo;A toolkit and runtime for building highly concurrent, distributed, and fault-tolerant
+                event-driven applications on the JVM http://akka.io.
+                .&rdquo;
+            </blockquote>
+        </section>
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments1.0">
+
+            <h2>Actor Model</h2>
+            <ul>
+                <li>A lightweight isolated "process" contains state and behavior</li>
+                <li> Communicates only via async & immutable messages (share nothing)</li>
+                <li> Has a mailbox (message queue)</li>
+                <li>Is supervised by its parent (for managing failure) is location transparent (distributable)</li>
+                <li>Is internally thread-safe</li>
+                <li>Very lightweight (~400 bytes)</li>
+                <li>Can be constructed and torn down very quickly</li>
+            </ul>
+        </section>
+
+        <section data-background="#021525" style="top: -299px; display: block;">
+            <img style="width:80%" src="images/api0.svg" data-fragment-index="0">
+            <img class="fragment visible" style="position: absolute; width:80%; margin-left: -80%" src="images/api1.svg"
+                 alt="API layer" data-fragment-index="1">
+            <img class="fragment" style="position: absolute; width:80%; margin-left: -80%" src="images/api2.svg"
+                 alt="API layer" data-fragment-index="2">
+            <img class="fragment" style="position: absolute; width:80%; margin-left: -80%" src="images/api3.svg"
+                 alt="API layer" data-fragment-index="3">
+            <img class="fragment" style="position: absolute; width:80%; margin-left: -80%" src="images/api4.svg"
+                 alt="API layer" data-fragment-index="4">
+            <img class="fragment" style="position: absolute; width:80%; margin-left: -80%" src="images/api5.svg"
+                 alt="API layer" data-fragment-index="5">
+        </section>
+
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments3">
+            <H2>Api Layer Responsibilities</H2>
+            <ul>
+                <li> Request routing based on method, path, query, entity</li>
+                <li> (Un)marshalling to / from domain objects</li>
+                <li> Encoding / decoding (compression)</li>
+                <li> Authentication / authorization</li>
+                <li> Caching and serving static content RESTful error handling</li>
+            </ul>
+        </section>
+
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments4">
+            <H2>Spray Key Components</H2>
+            <img style="width:80%" src="images/comp.svg" alt="spray components">
+        </section>
+
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments5">
+            <H2>spray-can</H2>
+            <ul>
+                <li> A low-level, low-overhead, high-performance HTTP server and client built on top of Akka IO.</li>
+                <li> Fully asynchronous, non-blocking.</li>
+                <li> Low per-connection overhead for supporting many thousand concurrent connections
+                </li>
+                <li> Connection management</li>
+                <li> Timeout management (for requests and connections)</li>
+            </ul>
+        </section>
+
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments6">
+            <H2>spray-can :How it works</H2>
+            <ul>
+                <li> Implemented by two types of Akka actors</li>
+                <li> HttpListener</li>
+                <li> HttpServerConnection</li>
+                <li>Requires User Defined Actor to handle the HttpRequest</li>
+                <li>Sends HttpRequest message to the user defined Actor</li>
+                <li>Receives HttpResponse message from the user defined Actor</li>
+            </ul>
+        </section>
+
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments7">
+            <H2>spray-routing</H2>
+            <ul>
+                <li> Provides a high-level, very flexible routing DSL for elegantly defining RESTful web services</li>
+                <li> Type-safe, yet flexible</li>
+                <li> <pre><code>
+                    type Route = RequestContext => Unit
+                </code></pre>
+                </li>
+            </ul>
+        </section>
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments8">
+
+            <H2>Question ???</H2>
+
+        </section>
+        <section data-transition="slide" data-background="#071f2f" data-background-transition="zoom" id="fragments9">
+            <H2>Thanks!!!</H2>
+
+            <h3>http://brijeshpant.com/</h3>
+        </section>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // Optional reveal.js plugins
+                dependencies: [
+                    {
+                        src: 'lib/js/classList.js', condition: function () {
+                        return !document.body.classList;
+                    }
+                    },
+                    {
+                        src: 'plugin/markdown/marked.js', condition: function () {
+                        return !!document.querySelector('[data-markdown]');
+                    }
+                    },
+                    {
+                        src: 'plugin/markdown/markdown.js', condition: function () {
+                        return !!document.querySelector('[data-markdown]');
+                    }
+                    },
+                    {
+                        src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                        hljs.initHighlightingOnLoad();
+                    }
+                    },
+                    {src: 'plugin/zoom-js/zoom.js', async: true},
+                    {src: 'plugin/notes/notes.js', async: true}
+                ]
+            });
+
+        </script></div>
+    </div>
+</body>
+</html>
